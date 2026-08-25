@@ -7,7 +7,7 @@ public class Passageiro {
     private int y;
     private int pontos;
 
-    public Passageiro(String nome, String tipo, int x, int y, int pontos) {
+    public Passageiro(String nome, String tipo, int x, int y) {
         this.nome = nome;
         this.tipo = tipo;
         this.x = x;
@@ -19,5 +19,6 @@ public class Passageiro {
     public String getTipo() { return tipo; }
     public int getX() { return x; }
     public int getY() { return y; }
+    public void setPontos(int pontos) { this.pontos = pontos; }
     public int getPontos() { return pontos; }
 }

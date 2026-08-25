@@ -174,13 +174,13 @@ public class Main {
             if (x == nave.getX() && y == nave.getY()) continue;
             if (posicaoOcupada(missao, x, y)) continue;
             if (missao.getPassageiros().isEmpty()) {
-                missao.addPassageiro(new Professor("Dr. Silva", x, y,10));
+                missao.addPassageiro(new Professor("Dr. Silva", x, y));
             } else if (missao.getPassageiros().size() > 1) {
-                missao.addPassageiro(new Astronauta("Neil Armstrong",x,y,20));
+                missao.addPassageiro(new Astronauta("Neil Armstrong",x,y));
             }else if (missao.getPassageiros().size() == 1) {
-                missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y,15));
+                missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y));
             } else {
-                missao.addPassageiro(new Professor("Dr. Lima", x, y,10));
+                missao.addPassageiro(new Professor("Dr. Lima", x, y));
             }
         }
 

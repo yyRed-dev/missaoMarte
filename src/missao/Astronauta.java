@@ -1,7 +1,12 @@
 package missao;
 
 public class Astronauta extends Passageiro {
-    public Astronauta (String nome, int x, int y, int pontos) {
-        super(nome, "Astronauta", x, y,20);
+    public Astronauta (String nome, int x, int y) {
+        super(nome, "Astronauta", x, y);
+    }
+
+    @Override
+    public int getPontos() {
+        return 20;
     }
 }

@@ -1,7 +1,12 @@
 package missao;
 
 public class Engenheiro extends Passageiro {
-    public Engenheiro(String nome, int x, int y, int pontos) {
-        super(nome, "Engenheiro", x, y, 15);
+    public Engenheiro(String nome, int x, int y) {
+        super(nome, "Engenheiro", x, y);
+    }
+
+    @Override
+    public int getPontos() {
+        return 15;
     }
 }
