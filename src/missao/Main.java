@@ -69,7 +69,7 @@ public class Main {
 
         boolean playAgain = true;
         while (playAgain) {
-            Missao missao = criarNovaMissao(random, minX, maxX, minY, maxY);
+            Missao missao = criarNovaMissao(random, minX, maxX, minY, maxY, scanner);
             Nave nave = missao.getNave();
             int score = 20;
             boolean running = true;
@@ -100,8 +100,8 @@ public class Main {
                         } else {
                             boolean ok = missao.embarcarPassageiroNaPosicao();
                             if (ok) {
-                                score += 10;
-                                System.out.println("Passageiro embarcado. +10 pontos!");
+                                score += p.getPontos();
+                                System.out.println( p.getTipo() + " embarcado. +" +p.getPontos()+ " pontos!");
                             } else {
                                 System.out.println("Nave cheia, não foi possível embarcar.");
                             }
@@ -162,8 +162,10 @@ public class Main {
         }
     }
 
-    private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY) {
-        Nave nave = new Nave("A-1", 5);
+    private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY, Scanner scanner) {
+        System.out.print("Tamanho da tripulacao: ");
+        int tamanho = scanner.nextInt();
+        Nave nave = new Nave("A-1", tamanho);
         Missao missao = new Missao(nave);
 
         while (missao.getPassageiros().size() < 5) {
@@ -172,13 +174,13 @@ public class Main {
             if (x == nave.getX() && y == nave.getY()) continue;
             if (posicaoOcupada(missao, x, y)) continue;
             if (missao.getPassageiros().isEmpty()) {
-                missao.addPassageiro(new Professor("Dr. Silva", x, y));
+                missao.addPassageiro(new Professor("Dr. Silva", x, y,10));
             } else if (missao.getPassageiros().size() > 1) {
-                missao.addPassageiro(new Astronauta("Neil Armstrong",x,y));
+                missao.addPassageiro(new Astronauta("Neil Armstrong",x,y,20));
             }else if (missao.getPassageiros().size() == 1) {
-                missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y));
+                missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y,15));
             } else {
-                missao.addPassageiro(new Professor("Dr. Lima", x, y));
+                missao.addPassageiro(new Professor("Dr. Lima", x, y,10));
             }
         }
 
