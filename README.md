@@ -20,3 +20,8 @@ Descrição rápida do jogo em console:
 - Objetivo: embarcar todos os passageiros sem colidir com asteroides.
 
 Use este projeto como ponto de partida para exercícios de refatoração (SOLID), testes e aplicação de padrões.
+
+# EQUIPE
+- - - 
+- cdanielfl : Carlos Daniel Freitas Lima Lins
+- yyRed-dev : João Pedro Palhano Militão
