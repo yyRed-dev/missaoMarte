@@ -15,10 +15,6 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         Random random = new Random();
-        int minX = -5;
-        int maxX = 5;
-        int minY = -5;
-        int maxY = 5;
 
         Path rankingPath = Paths.get("ranking.json");
         List<RankingEntry> ranking = loadRanking(rankingPath);
@@ -28,6 +24,24 @@ public class Main {
         String pilotoNome = scanner.nextLine().trim();
         if (pilotoNome.isEmpty()) {
             pilotoNome = "Piloto Anônimo";
+        }
+
+        System.out.print("Tamanho do mapa (Grid): ");
+        int tamanhoMapa = scanner.nextInt();
+        while (tamanhoMapa < 5) {
+            System.out.print("Tamanho minimo = 5. Tamanho do mapa: ");
+            tamanhoMapa = scanner.nextInt();
+        }
+        int minX = -tamanhoMapa;
+        int maxX = tamanhoMapa;
+        int minY = -tamanhoMapa;
+        int maxY = tamanhoMapa;
+
+        System.out.print("Tamanho da tripulacao: ");
+        int tamanhoTripulacao = scanner.nextInt();
+        while (tamanhoTripulacao <= 0) {
+            System.out.print("A tripulacao nao pode ter menos que 1 integrante.\n Tamanho tripulacao: ");
+            tamanhoTripulacao = scanner.nextInt();
         }
 
         System.out.println("================================================================");
@@ -42,7 +56,7 @@ public class Main {
                 System.out.printf(" %d. %s: %d pontos%n", i + 1, entry.name, entry.score);
             }
         }
-                
+        
         System.out.println();
         System.out.println("Bem-vindo à Missão Marte Unifor! Sua nave foi selecionada para uma expedição de resgate e pesquisa na superfície marciana.");
         System.out.println("Seu objetivo é localizar e embarcar todos os passageiros necessários para completar a missão antes que o seu tempo (pontuação) chegue a zero.");
@@ -69,13 +83,13 @@ public class Main {
 
         boolean playAgain = true;
         while (playAgain) {
-            Missao missao = criarNovaMissao(random, minX, maxX, minY, maxY, scanner);
+            Missao missao = criarNovaMissao(random, minX, maxX, minY, maxY, scanner, tamanhoTripulacao);
             Nave nave = missao.getNave();
             int score = 20;
             boolean running = true;
 
             while (running) {
-                desenharMapa(missao, -5, 5, -5, 5, score, pilotoNome);
+                desenharMapa(missao, minY, maxX, minX, maxY, score, pilotoNome);
                 System.out.printf("Nave em (%d,%d) | Pontos: %d | Passageiros a bordo: %d | Passageiros restantes: %d\n",
                         nave.getX(), nave.getY(), score, nave.getPassageiros().size(), missao.todosEmbarcados() ? 0 : missao.getPassageiros().size());
 
@@ -162,10 +176,8 @@ public class Main {
         }
     }
 
-    private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY, Scanner scanner) {
-        System.out.print("Tamanho da tripulacao: ");
-        int tamanho = scanner.nextInt();
-        Nave nave = new Nave("A-1", tamanho);
+    private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY, Scanner scanner, int tamanhoTripulacao) {
+        Nave nave = new Nave("A-1", tamanhoTripulacao);
         Missao missao = new Missao(nave);
 
         while (missao.getPassageiros().size() < 5) {
@@ -177,14 +189,14 @@ public class Main {
                 missao.addPassageiro(new Professor("Dr. Silva", x, y));
             } else if (missao.getPassageiros().size() > 1) {
                 missao.addPassageiro(new Astronauta("Neil Armstrong",x,y));
-            }else if (missao.getPassageiros().size() == 1) {
+            } else if (missao.getPassageiros().size() == 1) {
                 missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y));
             } else {
                 missao.addPassageiro(new Professor("Dr. Lima", x, y));
             }
         }
 
-        while (missao.getAsteroides().size() < 2) {
+        while (missao.getAsteroides().size() < 3) {
             int x = random.nextInt(maxX - minX + 1) + minX;
             int y = random.nextInt(maxY - minY + 1) + minY;
             if (x == nave.getX() && y == nave.getY()) continue;
