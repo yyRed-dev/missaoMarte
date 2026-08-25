@@ -79,7 +79,7 @@ public class Main {
                 System.out.printf("Nave em (%d,%d) | Pontos: %d | Passageiros a bordo: %d | Passageiros restantes: %d\n",
                         nave.getX(), nave.getY(), score, nave.getPassageiros().size(), missao.todosEmbarcados() ? 0 : missao.getPassageiros().size());
 
-                if (missao.verificaColisao()) {
+                if (missao.verificaColisao() ) {
                     System.out.println("Colisão com asteroide! Missão abortada.");
                     break;
                 }

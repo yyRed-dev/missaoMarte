@@ -30,7 +30,14 @@ public class Missao {
 
     public boolean verificaColisao() {
         for (Asteroide a : asteroides) {
-            if (a.colideCom(nave)) return true;
+            if (a.colideCom(nave)) {
+                nave.sofreuDano();
+                System.out.println("\nColisão com Asteroide! Total de vidas restantes: " + nave.getVidas() + "/3.");
+
+                if (nave.getVidas() == 0) {
+                    return true;
+                }
+            }
         }
         return false;
     }

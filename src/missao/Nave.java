@@ -24,6 +24,7 @@ public class Nave {
     public int getY() { return y; }
     public int getCapacidade() { return capacidade; }
     public List<Passageiro> getPassageiros() { return passageiros; }
+    public int getVidas() { return vidas; }
 
     public void moveUp() { y--; }
     public void moveDown() { y++; }

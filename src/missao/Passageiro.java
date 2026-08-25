@@ -12,7 +12,6 @@ public class Passageiro {
         this.tipo = tipo;
         this.x = x;
         this.y = y;
-        this.pontos = pontos;
     }
 
     public String getNome() { return nome; }
