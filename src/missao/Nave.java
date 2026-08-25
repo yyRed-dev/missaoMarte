@@ -9,12 +9,14 @@ public class Nave {
     private int y;
     private int capacidade;
     private List<Passageiro> passageiros = new ArrayList<>();
+    private int vidas;
 
     public Nave(String id, int capacidade) {
         this.id = id;
         this.capacidade = capacidade;
         this.x = 0;
         this.y = 0;
+        this.vidas = 3;
     }
 
     public String getId() { return id; }
@@ -27,6 +29,8 @@ public class Nave {
     public void moveDown() { y++; }
     public void moveLeft() { x--; }
     public void moveRight() { x++; }
+
+    public void sofreuDano() { vidas--;}
 
     public boolean embarcar(Passageiro p) {
         if (passageiros.size() < capacidade) {

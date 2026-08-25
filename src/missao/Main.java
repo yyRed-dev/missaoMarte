@@ -163,17 +163,19 @@ public class Main {
     }
 
     private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY) {
-        Nave nave = new Nave("A-1", 3);
+        Nave nave = new Nave("A-1", 5);
         Missao missao = new Missao(nave);
 
-        while (missao.getPassageiros().size() < 3) {
+        while (missao.getPassageiros().size() < 5) {
             int x = random.nextInt(maxX - minX + 1) + minX;
             int y = random.nextInt(maxY - minY + 1) + minY;
             if (x == nave.getX() && y == nave.getY()) continue;
             if (posicaoOcupada(missao, x, y)) continue;
             if (missao.getPassageiros().isEmpty()) {
                 missao.addPassageiro(new Professor("Dr. Silva", x, y));
-            } else if (missao.getPassageiros().size() == 1) {
+            } else if (missao.getPassageiros().size() > 1) {
+                missao.addPassageiro(new Astronauta("Neil Armstrong",x,y));
+            }else if (missao.getPassageiros().size() == 1) {
                 missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y));
             } else {
                 missao.addPassageiro(new Professor("Dr. Lima", x, y));
@@ -227,6 +229,8 @@ public class Main {
                         if (p.getX() == x && p.getY() == y) {
                             if (p instanceof Engenheiro) {
                                 symbol = 'E';
+                            } else if (p instanceof Astronauta) {
+                                symbol = 'T';
                             } else {
                                 symbol = 'P';
                             }
@@ -247,7 +251,7 @@ public class Main {
             System.out.println();
         }
 
-        System.out.println("Legenda: N=Nave, P=Professor, E=Engenheiro, A=Asteroide, .=Vazio");
+        System.out.println("Legenda: N=Nave, P=Professor, E=Engenheiro, T=Astronauta, A=Asteroide, .=Vazio");
         System.out.println("Resumo de comandos: w(cima)/s(baixo)/a(esquerda)/d(direita) mover, c embarcar, q sair");
         System.out.println("Passageiros restantes:");
         for (Passageiro p : missao.getPassageiros()) {
