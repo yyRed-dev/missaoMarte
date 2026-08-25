@@ -21,7 +21,7 @@ Descrição rápida do jogo em console:
 
 Use este projeto como ponto de partida para exercícios de refatoração (SOLID), testes e aplicação de padrões.
 
+
 # EQUIPE
-- - - 
 - cdanielfl : Carlos Daniel Freitas Lima Lins
 - yyRed-dev : João Pedro Palhano Militão
