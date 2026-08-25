@@ -180,7 +180,7 @@ public class Main {
         Nave nave = new Nave("A-1", tamanhoTripulacao);
         Missao missao = new Missao(nave);
 
-        while (missao.getPassageiros().size() < 5) {
+        while (missao.getPassageiros().size() < tamanhoTripulacao) {
             int x = random.nextInt(maxX - minX + 1) + minX;
             int y = random.nextInt(maxY - minY + 1) + minY;
             if (x == nave.getX() && y == nave.getY()) continue;
@@ -188,7 +188,7 @@ public class Main {
             if (missao.getPassageiros().isEmpty()) {
                 missao.addPassageiro(new Professor("Dr. Silva", x, y));
             } else if (missao.getPassageiros().size() > 1) {
-                missao.addPassageiro(new Astronauta("Neil Armstrong",x,y));
+                missao.addPassageiro(new Astronauta("Astronauta",x,y));
             } else if (missao.getPassageiros().size() == 1) {
                 missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y));
             } else {
