@@ -33,7 +33,7 @@ Use este projeto como ponto de partida para exercícios de refatoração (SOLID)
 
 4. Pontuação Polimórfica: Aplicar sobrescrita de métodos (@Override) para que cada tipo de passageiro ofereça uma pontuação distinta ao ser embarcado (Professor: +10, Engenheiro: +15, Astronauta: +20). ✅
 5. Sistema de Vidas na Nave: Implementar o atributo de vidas na classe Nave e a lógica de perda de vidas ao colidir com asteroides. ✅
-6. Mapa Configurável: Permitir que o jogador informe a dimensão do mapa no início da execução.
+6. Mapa Configurável: Permitir que o jogador informe a dimensão do mapa no início da execução. ✅
 
 7. Inimigos Dinâmicos com IA Simples: Criar a entidade Inimigo com movimentação aleatória pelo mapa a cada turno e verificação de colisão.
 8. Menu de Dificuldades (Enum): Criar o enum Dificuldade (FACIL, MEDIO, DIFICIL) ajustando proporcionalmente recursos, pontuação inicial e quantidade de obstáculos.

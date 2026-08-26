@@ -19,6 +19,9 @@ public class Main {
         Path rankingPath = Paths.get("ranking.json");
         List<RankingEntry> ranking = loadRanking(rankingPath);
 
+        int tamanhoTripulacao = 0;
+        int score = 0;
+
         Scanner scanner = new Scanner(System.in);
         System.out.print("Digite o nome do piloto: ");
         String pilotoNome = scanner.nextLine().trim();
@@ -37,12 +40,35 @@ public class Main {
         int minY = -tamanhoMapa;
         int maxY = tamanhoMapa;
 
-        System.out.print("Tamanho da tripulacao: ");
-        int tamanhoTripulacao = scanner.nextInt();
-        while (tamanhoTripulacao <= 0) {
-            System.out.print("A tripulacao nao pode ter menos que 1 integrante.\n Tamanho tripulacao: ");
-            tamanhoTripulacao = scanner.nextInt();
+        System.out.println("Selecione a Dificuldade (1: FACIL / 2: MEDIO / 3: DIFICIL)");
+        System.out.print("Dificuldade: ");
+        int dificuldade = scanner.nextInt();
+
+        while(dificuldade != 1 && dificuldade != 2 && dificuldade != 3) {
+            System.out.print("\nInforme um valor valido para a dificuldade (1: FACIL / 2: MEDIO / 3: DIFICIL).\nDificuldade: ");
+            dificuldade = scanner.nextInt();
         }
+
+        switch(dificuldade) {
+            case 1:
+                tamanhoTripulacao = 3;
+                score = 20;
+                break;
+
+            case 2:
+                tamanhoTripulacao = 5;
+                score = 18;
+                break;
+
+            case 3:
+                tamanhoTripulacao = 7;
+                score = 15;
+                break;
+
+            default:
+                System.out.println("Erro durante a seleção de dificuldade. Por favor, reinicie o jogo e tente novamente.");
+                break;
+        }  
 
         System.out.println("================================================================");
         System.out.println("Missão Marte Unifor — Console");
@@ -75,7 +101,7 @@ public class Main {
         System.out.println(" - c: embarcar passageiro na posição atual");
         System.out.println(" - q: sair do jogo");
         System.out.println();
-        System.out.println("Pontuação inicial: 20 pontos. Cada movimento custa 1 ponto. Cada embarque vale +10 pontos.");
+        System.out.println("Pontuação inicial: " +score+ " pontos. Cada movimento custa 1 ponto. Cada embarque vale pontos variados de acordo com o tripulante.");
         System.out.println();
         System.out.println("Pressione Enter para iniciar a missão...");
         scanner.nextLine();
@@ -83,9 +109,8 @@ public class Main {
 
         boolean playAgain = true;
         while (playAgain) {
-            Missao missao = criarNovaMissao(random, minX, maxX, minY, maxY, scanner, tamanhoTripulacao);
+            Missao missao = criarNovaMissao(random, minX, maxX, minY, maxY, scanner, tamanhoTripulacao, score);
             Nave nave = missao.getNave();
-            int score = 20;
             boolean running = true;
 
             while (running) {
@@ -176,7 +201,7 @@ public class Main {
         }
     }
 
-    private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY, Scanner scanner, int tamanhoTripulacao) {
+    private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY, Scanner scanner, int tamanhoTripulacao, int score) {
         Nave nave = new Nave("A-1", tamanhoTripulacao);
         Missao missao = new Missao(nave);
 
