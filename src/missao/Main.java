@@ -51,27 +51,10 @@ public class Main {
         }
 
         switch(dificuldade) {
-            case 1:
-                tamanhoTripulacao = 3;
-                score = 20;
-                numInimigos = 1;
-                break;
-
-            case 2:
-                tamanhoTripulacao = 5;
-                score = 18;
-                numInimigos = 2;
-                break;
-
-            case 3:
-                tamanhoTripulacao = 7;
-                score = 15;
-                numInimigos = 3;
-                break;
-
-            default:
-                System.out.println("Erro durante a seleção de dificuldade. Por favor, reinicie o jogo e tente novamente.");
-                break;
+            case 1: tamanhoTripulacao = 3; score = 20; numInimigos = 1; break;
+            case 2: tamanhoTripulacao = 5; score = 18; numInimigos = 2; break;
+            case 3: tamanhoTripulacao = 7; score = 15; numInimigos = 3; break;
+            default: System.out.println("Erro durante a seleção de dificuldade. Por favor, reinicie o jogo e tente novamente."); break;
         }  
 
         System.out.println("================================================================");
@@ -154,6 +137,7 @@ public class Main {
                     case 'q': running = false; break;
                     default: System.out.println("Comando desconhecido.");
                 }
+                movimentoInimigos(missao);
 
                 if (score <= 0) {
                     System.out.println("Pontuação zerada. Missão perdida.");
@@ -256,6 +240,13 @@ public class Main {
             if (i.getX() == x && i.getY() == y) return true;
         }
         return false;
+    }
+
+    private static void movimentoInimigos(Missao missao) {
+        for (Inimigo inimigo : missao.getInimigos() ) {
+            int mov = (int) (Math.random() *4 );
+            inimigo.moverAleatorio(mov);
+        }
     }
 
     private static void desenharMapa(Missao missao, int minX, int maxX, int minY, int maxY, int score, String pilotoNome) {

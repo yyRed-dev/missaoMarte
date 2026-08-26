@@ -25,10 +25,10 @@ public class Inimigo {
 
     public void moverAleatorio(int x) {
         switch(x) {
-            case 1: this.moverCima(); break;
-            case 2: this.moverDireita(); break;
-            case 3: this.moverBaixo(); break;
-            case 4: this.moverEsquerda(); break;
+            case 0: this.moverCima(); break;
+            case 1: this.moverDireita(); break;
+            case 2: this.moverBaixo(); break;
+            case 3: this.moverEsquerda(); break;
             default:
                 System.out.println("Um erro ocorreu com o movimento do Inimigo, por favor reinicie o jogo.");
                 break;
