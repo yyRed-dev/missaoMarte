@@ -23,20 +23,20 @@ Use este projeto como ponto de partida para exercícios de refatoração (SOLID)
 
 
 # EQUIPE
-- cdanielfl : Carlos Daniel Freitas Lima Lins
 - yyRed-dev : João Pedro Palhano Militão
+Obs.: Minha dupla saiu da faculdade.
 
 ## OBJETIVOS DO TRABALHO
-1. Ajuste de Capacidade: Configurar a capacidade da nave para comportar a nova carga de passageiros do sistema. ✅
-2. Nova Subclasse de Passageiro (Astronauta): Criar a classe Astronauta estendendo Passageiro, definindo suas especificidades e adicionando-o ao fluxo do jogo. ✅
+1. ✅ Ajuste de Capacidade: Configurar a capacidade da nave para comportar a nova carga de passageiros do sistema.
+2. ✅ Nova Subclasse de Passageiro (Astronauta): Criar a classe Astronauta estendendo Passageiro, definindo suas especificidades e adicionando-o ao fluxo do jogo.
 3. Customização Visual: Atualizar a renderização do mapa em console alterando a representação simbólica de elementos (ex: Nave e Asteroides).
 
-4. Pontuação Polimórfica: Aplicar sobrescrita de métodos (@Override) para que cada tipo de passageiro ofereça uma pontuação distinta ao ser embarcado (Professor: +10, Engenheiro: +15, Astronauta: +20). ✅
-5. Sistema de Vidas na Nave: Implementar o atributo de vidas na classe Nave e a lógica de perda de vidas ao colidir com asteroides. ✅
-6. Mapa Configurável: Permitir que o jogador informe a dimensão do mapa no início da execução. ✅
+4. ✅ Pontuação Polimórfica: Aplicar sobrescrita de métodos (@Override) para que cada tipo de passageiro ofereça uma pontuação distinta ao ser embarcado (Professor: +10, Engenheiro: +15, Astronauta: +20).
+5. ✅ Sistema de Vidas na Nave: Implementar o atributo de vidas na classe Nave e a lógica de perda de vidas ao colidir com asteroides.
+6. ✅ Mapa Configurável: Permitir que o jogador informe a dimensão do mapa no início da execução.
 
 7. Inimigos Dinâmicos com IA Simples: Criar a entidade Inimigo com movimentação aleatória pelo mapa a cada turno e verificação de colisão.
-8. Menu de Dificuldades (Enum): Criar o enum Dificuldade (FACIL, MEDIO, DIFICIL) ajustando proporcionalmente recursos, pontuação inicial e quantidade de obstáculos.
+8. ✅ Menu de Dificuldades (Enum): Criar o enum Dificuldade (FACIL, MEDIO, DIFICIL) ajustando proporcionalmente recursos, pontuação inicial e quantidade de obstáculos.
 9. Persistência Expandida: Ampliar o formato do ranking.json para salvar e carregar dados adicionais da partida (ex: data/hora, passageiros resgatados e nível de dificuldade).
 
 10. Extras
