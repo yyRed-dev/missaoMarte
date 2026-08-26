@@ -148,7 +148,7 @@ public class Main {
                     System.out.println("Todos os passageiros embarcados! Missão concluída com sucesso.");
                     System.out.printf("Pontuação final: %d\n", score);
                     if (score > 0 && isTopScore(ranking, score)) {
-                        ranking.add(new RankingEntry(pilotoNome, score));
+                        ranking.add(new RankingEntry(pilotoNome, score, nave.getPassageiros().size() ) );
                         ranking = ranking.stream()
                                 .sorted(Comparator.comparingInt((RankingEntry e) -> e.score).reversed())
                                 .limit(5)
@@ -391,7 +391,7 @@ public class Main {
                 }
             }
             if (name != null && score != null) {
-                ranking.add(new RankingEntry(name, score));
+                ranking.add(new RankingEntry(name, score, 0) );
             }
             index = end + 1;
         }
@@ -403,10 +403,12 @@ public class Main {
     private static class RankingEntry {
         private final String name;
         private final int score;
+        private final int tripulacao;
 
-        private RankingEntry(String name, int score) {
+        private RankingEntry(String name, int score, int tripulacao) {
             this.name = name;
             this.score = score;
+            this.tripulacao = tripulacao;
         }
     }
 }
