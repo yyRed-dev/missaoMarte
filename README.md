@@ -35,7 +35,7 @@ Obs.: Minha dupla saiu da faculdade.
 5. ✅ Sistema de Vidas na Nave: Implementar o atributo de vidas na classe Nave e a lógica de perda de vidas ao colidir com asteroides.
 6. ✅ Mapa Configurável: Permitir que o jogador informe a dimensão do mapa no início da execução.
 
-7. *Inimigos Dinâmicos com IA Simples: Criar a entidade Inimigo com movimentação aleatória pelo mapa a cada turno e verificação de colisão.
+7. ✅ Inimigos Dinâmicos com IA Simples: Criar a entidade Inimigo com movimentação aleatória pelo mapa a cada turno e verificação de colisão.
 8. ✅ Menu de Dificuldades (Enum): Criar o enum Dificuldade (FACIL, MEDIO, DIFICIL) ajustando proporcionalmente recursos, pontuação inicial e quantidade de obstáculos.
 9. Persistência Expandida: Ampliar o formato do ranking.json para salvar e carregar dados adicionais da partida (ex: data/hora, passageiros resgatados e nível de dificuldade).
 
