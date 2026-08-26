@@ -8,6 +8,7 @@ public class Missao {
     private Nave nave;
     private List<Passageiro> passageiros = new ArrayList<>();
     private List<Asteroide> asteroides = new ArrayList<>();
+    private List<Inimigo> inimigos = new ArrayList<>();
 
     public Missao(Nave nave) {
         this.nave = nave;
@@ -25,14 +26,30 @@ public class Missao {
         return asteroides;
     }
 
+    public java.util.List<Inimigo> getInimigos() {
+        return inimigos;
+    }
+
     public void addPassageiro(Passageiro p) { passageiros.add(p); }
     public void addAsteroide(Asteroide a) { asteroides.add(a); }
+    public void addInimigo(Inimigo i) { inimigos.add(i); }
 
     public boolean verificaColisao() {
         for (Asteroide a : asteroides) {
             if (a.colideCom(nave)) {
                 nave.sofreuDano();
                 System.out.println("\nColisão com Asteroide! Total de vidas restantes: " + nave.getVidas() + "/3.");
+
+                if (nave.getVidas() == 0) {
+                    return true;
+                }
+            }
+        }
+
+        for (Inimigo i : inimigos) {
+            if (i.colideCom(nave)) {
+                nave.sofreuDano();
+                System.out.println("\nColisão com Nave inimiga! Total de vidas restantes: " + nave.getVidas() + "/3.");
 
                 if (nave.getVidas() == 0) {
                     return true;
