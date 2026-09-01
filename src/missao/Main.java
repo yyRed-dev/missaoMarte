@@ -66,7 +66,7 @@ public class Main {
         } else {
             for (int i = 0; i < Math.min(5, ranking.size()); i++) {
                 RankingEntry entry = ranking.get(i);
-                System.out.printf(" %d. %s: %d pontos%n", i + 1, entry.name, entry.score);
+                System.out.printf(" %d. %s: %d pontos - %d tripulantes%n",i + 1, entry.name, entry.score, entry.tripulacao);
             }
         }
         
@@ -185,7 +185,7 @@ public class Main {
     private static void printRanking(List<RankingEntry> ranking) {
         int position = 1;
         for (RankingEntry entry : ranking) {
-            System.out.printf("%d. %s - %d pontos%n", position++, entry.name, entry.score);
+            System.out.printf("%d. %s - %d pontos - %d tripulantes%n",position++, entry.name, entry.score, entry.tripulacao);
         }
     }
 
@@ -333,6 +333,8 @@ public class Main {
                     .append(entry.name.replace("\"", "\\\""))
                     .append("\",\"score\":")
                     .append(entry.score)
+                    .append(",\"tripulacao\":")
+                    .append(entry.tripulacao)
                     .append("}");
             if (i < ranking.size() - 1) {
                 builder.append(",");
@@ -368,6 +370,7 @@ public class Main {
             String object = json.substring(start + 1, end);
             String name = null;
             Integer score = null;
+            Integer tripulacao = null;
             for (String part : object.split(",")) {
                 String[] pair = part.split(":", 2);
                 if (pair.length != 2) continue;
@@ -382,10 +385,15 @@ public class Main {
                         score = Integer.parseInt(value);
                     } catch (NumberFormatException ignored) {
                     }
+                } else if (key.equals("tripulacao")) {
+                    try {
+                        tripulacao = Integer.parseInt(value);
+                    } catch (NumberFormatException ignored) {
+                    }
                 }
             }
             if (name != null && score != null) {
-                ranking.add(new RankingEntry(name, score, 0) );
+                ranking.add(new RankingEntry(name, score, tripulacao != null ? tripulacao : 0));
             }
             index = end + 1;
         }
