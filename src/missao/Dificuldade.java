@@ -1,4 +1,5 @@
 package missao;
+
 public enum Dificuldade {
 
     FACIL(3, 20, 1, 2),

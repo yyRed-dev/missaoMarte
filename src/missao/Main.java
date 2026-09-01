@@ -18,6 +18,7 @@ public class Main {
         CriadorDeMissao criadorDeMissao = new CriadorDeMissao(random);
         GerenciadorColisoes gerenciadorColisoes = new GerenciadorColisoes();
         GerenciadorInimigos gerenciadorInimigos = new GerenciadorInimigos(random);
+        RenderizadorMapa renderizadorMapa = new RenderizadorMapa();
 
         Path rankingPath = Paths.get("ranking.json");
         List<RankingEntry> ranking = loadRanking(rankingPath);
@@ -103,7 +104,7 @@ public class Main {
             boolean running = true;
 
             while (running) {
-                desenharMapa(missao, minY, maxX, minX, maxY, score, pilotoNome);
+                renderizadorMapa.desenhar(missao, minX, maxX, minY, maxY, score, pilotoNome);
                 System.out.printf("Nave em (%d,%d) | Pontos: %d | Passageiros a bordo: %d | Passageiros restantes: %d\n",
                         nave.getX(), nave.getY(), score, nave.getPassageiros().size(), missao.todosEmbarcados() ? 0 : missao.getPassageiros().size());
 
@@ -198,62 +199,6 @@ public class Main {
         for (RankingEntry entry : ranking) {
             System.out.printf("%d. %s - %d pontos - %d tripulantes%n",position++, entry.name, entry.score, entry.tripulacao);
         }
-    }
-
-    private static void desenharMapa(Missao missao, int minX, int maxX, int minY, int maxY, int score, String pilotoNome) {
-        System.out.println();
-        System.out.printf("Mapa da Missão (Pontos: %d) - Piloto: %s%n", score, pilotoNome);
-        System.out.print("    ");
-        for (int x = minX; x <= maxX; x++) {
-            System.out.printf(" %2d", x);
-        }
-        System.out.println();
-        System.out.print("    ");
-        for (int x = minX; x <= maxX; x++) {
-            System.out.print(" __");
-        }
-        System.out.println();
-
-        for (int y = minY; y <= maxY; y++) {
-            System.out.printf("%3d|", y);
-            for (int x = minX; x <= maxX; x++) {
-                char symbol = '.';
-                if (missao.getNave().getX() == x && missao.getNave().getY() == y) {
-                    symbol = 'N';
-                } else {
-                    for (Passageiro p : missao.getPassageiros()) {
-                        if (p.getX() == x && p.getY() == y) {
-                            symbol = p.getSimbolo();
-                            break;
-                        }
-                    }
-                    if (symbol == '.') {
-                        for (Asteroide a : missao.getAsteroides()) {
-                            if (a.getX() == x && a.getY() == y) {
-                                symbol = 'A';
-                                break;
-                            }
-                        }
-                        for (Inimigo i : missao.getInimigos() ) {
-                            if (i.getX() == x && i.getY() == y) {
-                                symbol = 'I';
-                                break;
-                            }
-                        }
-                    }
-                }
-                System.out.printf(" %2c", symbol);
-            }
-            System.out.println();
-        }
-
-        System.out.println("Legenda: N=Nave, P=Professor, E=Engenheiro, T=Astronauta, A=Asteroide, I=Inimigo, .=Vazio");
-        System.out.println("Resumo de comandos: w(cima)/s(baixo)/a(esquerda)/d(direita) mover, c embarcar, q sair");
-        System.out.println("Passageiros restantes:");
-        for (Passageiro p : missao.getPassageiros()) {
-            System.out.printf(" - %s (%s) em (%d,%d)\n", p.getNome(), p.getTipo(), p.getX(), p.getY());
-        }
-        System.out.println();
     }
 
     private static boolean isTopScore(List<RankingEntry> ranking, int score) {
