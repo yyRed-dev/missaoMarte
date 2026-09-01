@@ -109,10 +109,45 @@ public class ControladorMissao {
             char cmd = line.charAt(0);
 
             switch (cmd) {
-                case 'w': nave.moveUp(); score--; break;
-                case 's': nave.moveDown(); score--; break;
-                case 'a': nave.moveLeft(); score--; break;
-                case 'd': nave.moveRight(); score--; break;
+                case 'w':
+                    if (nave.getY() > minY) {
+                        nave.moveUp();
+                        score--;
+                    } else {
+                        System.out.println("Você não pode passar desse ponto!");
+                        if (dificuldade == Dificuldade.DIFICIL) score--;
+                    }
+                    break;
+
+                case 's':
+                    if (nave.getY() < maxY) {
+                        nave.moveDown();
+                        score--;
+                    } else {
+                        System.out.println("Você não pode passar desse ponto!");
+                        if (dificuldade == Dificuldade.DIFICIL) score--;
+                    }
+                    break;
+
+                case 'a':
+                    if (nave.getX() > minX) {
+                        nave.moveLeft();
+                        score--;
+                    } else {
+                        System.out.println("Você não pode passar desse ponto!");
+                        if (dificuldade == Dificuldade.DIFICIL) score--;
+                    }
+                    break;
+
+                case 'd':
+                    if (nave.getX() < maxX) {
+                        nave.moveRight();
+                        score--;
+                    } else {
+                        System.out.println("Você não pode passar desse ponto!");
+                        if (dificuldade == Dificuldade.DIFICIL) score--;
+                    }
+                    break;
 
                 case 'c':
                     Passageiro p = missao.passagemNaPosicao();
@@ -140,7 +175,7 @@ public class ControladorMissao {
                     continue;
             }
 
-            gerenciadorInimigos.movimentar(missao, minX, maxX, minY, maxY);
+            gerenciadorInimigos.moverInimigos( missao.getInimigos(), minX, maxX, minY, maxY);
 
             ResultadoColisao resultadoColisao = gerenciadorColisoes.verificarColisao(missao);
 
@@ -171,9 +206,8 @@ public class ControladorMissao {
                 break;
             }
 
-            if (missao.todosEmbarcados()) {
-                System.out.println("Todos os passageiros embarcados! Missão concluída com sucesso.");
-                System.out.printf("Pontuação final: %d\n", score);
+            if (missao.todosEmbarcados() && nave.getX() == missao.getPlataformaPouso().getX() && nave.getY() == missao.getPlataformaPouso().getY()) {
+                System.out.println("Missão concluída! A nave retornou à plataforma de pouso.");
 
                 if (score > 0 && gerenciadorRanking.ehTop5(ranking, score)) {
                     gerenciadorRanking.adicionarPontuacao(ranking, pilotoNome, score, nave.getPassageiros().size(), nave.getPassageiros().size(), dificuldade, rankingPath);

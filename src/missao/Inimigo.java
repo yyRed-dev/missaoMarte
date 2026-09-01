@@ -15,8 +15,8 @@ public class Inimigo {
     public void setX(int x) { this.x = x; }
     public void setY(int y) { this.y = y; }
 
-    public void moverCima() { y++; }
-    public void moverBaixo() { y--; }
+    public void moverCima() { y--; }
+    public void moverBaixo() { y++; }
     public void moverDireita() { x++; }
     public void moverEsquerda() { x--; }
 
@@ -24,16 +24,6 @@ public class Inimigo {
 
     public boolean colideCom(Nave n) {
         return n.getX() == x && n.getY() == y;
-    }
-
-    public void moverAleatorio(int x) {
-        switch(x) {
-            case 0: this.moverCima(); break;
-            case 1: this.moverDireita(); break;
-            case 2: this.moverBaixo(); break;
-            case 3: this.moverEsquerda(); break;
-            default: System.out.println("Um erro ocorreu com o movimento do Inimigo, por favor reinicie o jogo."); break;
-        }
     }
 
 }

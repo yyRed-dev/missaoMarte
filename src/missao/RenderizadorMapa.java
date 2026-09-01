@@ -29,7 +29,7 @@ public class RenderizadorMapa {
             System.out.println();
         }
 
-        System.out.println("Legenda: N=Nave, P=Professor, E=Engenheiro, T=Astronauta, A=Asteroide, I=Inimigo, .=Vazio");
+        System.out.println("Legenda: N=Nave, P=Professor, E=Engenheiro, T=Astronauta, A=Asteroide, I=Inimigo, _=Plataforma de Pouso (0,0), .=Vazio");
         System.out.println("Resumo de comandos: w(cima)/s(baixo)/a(esquerda)/d(direita) mover, c embarcar, q sair");
         System.out.println("Passageiros restantes:");
 
