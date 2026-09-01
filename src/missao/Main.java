@@ -15,13 +15,10 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         Random random = new Random();
+        CriadorDeMissao criadorDeMissao = new CriadorDeMissao(random);
 
         Path rankingPath = Paths.get("ranking.json");
         List<RankingEntry> ranking = loadRanking(rankingPath);
-
-        int tamanhoTripulacao = 0;
-        int score = 0;
-        int numInimigos = 0;
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Digite o nome do piloto: ");
@@ -43,19 +40,21 @@ public class Main {
 
         System.out.println("Selecione a Dificuldade (1: FACIL / 2: MEDIO / 3: DIFICIL)");
         System.out.print("Dificuldade: ");
-        int dificuldade = scanner.nextInt();
+        int opcaoDificuldade = scanner.nextInt();
 
-        while(dificuldade != 1 && dificuldade != 2 && dificuldade != 3) {
+        while(opcaoDificuldade != 1 && opcaoDificuldade != 2 && opcaoDificuldade != 3) {
             System.out.print("\nInforme um valor valido para a dificuldade (1: FACIL / 2: MEDIO / 3: DIFICIL).\nDificuldade: ");
-            dificuldade = scanner.nextInt();
+            opcaoDificuldade = scanner.nextInt();
         }
 
-        switch(dificuldade) {
-            case 1: tamanhoTripulacao = 3; score = 20; numInimigos = 1; break;
-            case 2: tamanhoTripulacao = 5; score = 18; numInimigos = 2; break;
-            case 3: tamanhoTripulacao = 7; score = 15; numInimigos = 3; break;
+        Dificuldade dificuldade = null;
+
+        switch(opcaoDificuldade) {
+            case 1: dificuldade = Dificuldade.FACIL; break;
+            case 2: dificuldade = Dificuldade.MEDIO; break;
+            case 3: dificuldade = Dificuldade.DIFICIL; break;
             default: System.out.println("Erro durante a seleção de dificuldade. Por favor, reinicie o jogo e tente novamente."); break;
-        }  
+        }   
 
         System.out.println("================================================================");
         System.out.println("Missão Marte Unifor — Console");
@@ -88,7 +87,7 @@ public class Main {
         System.out.println(" - c: embarcar passageiro na posição atual");
         System.out.println(" - q: sair do jogo");
         System.out.println();
-        System.out.println("Pontuação inicial: " +score+ " pontos. Cada movimento custa 1 ponto. Cada embarque vale pontos variados de acordo com o tripulante.");
+        System.out.println("Pontuação inicial: 20/18/15 pontos (varia com a Dificuldade). Cada movimento custa 1 ponto. Cada embarque vale pontos de acordo com o tipo do tripulante.");
         System.out.println();
         System.out.println("Pressione Enter para iniciar a missão...");
         scanner.nextLine();
@@ -96,7 +95,8 @@ public class Main {
 
         boolean playAgain = true;
         while (playAgain) {
-            Missao missao = criarNovaMissao(random, minX, maxX, minY, maxY, scanner, tamanhoTripulacao, score, numInimigos);
+            int score = dificuldade.getPontuacaoInicial();
+            Missao missao = criadorDeMissao.criar(minX, maxX, minY, maxY, dificuldade);
             Nave nave = missao.getNave();
             boolean running = true;
 
@@ -187,59 +187,6 @@ public class Main {
         for (RankingEntry entry : ranking) {
             System.out.printf("%d. %s - %d pontos - %d tripulantes%n",position++, entry.name, entry.score, entry.tripulacao);
         }
-    }
-
-    private static Missao criarNovaMissao(Random random, int minX, int maxX, int minY, int maxY, Scanner scanner, int tamanhoTripulacao, int score, int numInimigos) {
-        Nave nave = new Nave("A-1", tamanhoTripulacao);
-        Missao missao = new Missao(nave);
-
-        while (missao.getPassageiros().size() < tamanhoTripulacao) {
-            int x = random.nextInt(maxX - minX + 1) + minX;
-            int y = random.nextInt(maxY - minY + 1) + minY;
-            if (x == nave.getX() && y == nave.getY()) continue;
-            if (posicaoOcupada(missao, x, y)) continue;
-            if (missao.getPassageiros().isEmpty()) {
-                missao.addPassageiro(new Professor("Dr. Silva", x, y));
-            } else if (missao.getPassageiros().size() > 1) {
-                missao.addPassageiro(new Astronauta("Astronauta",x,y));
-            } else if (missao.getPassageiros().size() == 1) {
-                missao.addPassageiro(new Engenheiro("Eng. Rosa", x, y));
-            } else {
-                missao.addPassageiro(new Professor("Dr. Lima", x, y));
-            }
-        }
-
-        while (missao.getAsteroides().size() < 3) {
-            int x = random.nextInt(maxX - minX + 1) + minX;
-            int y = random.nextInt(maxY - minY + 1) + minY;
-            if (x == nave.getX() && y == nave.getY()) continue;
-            if (posicaoOcupada(missao, x, y)) continue;
-            missao.addAsteroide(new Asteroide(x, y));
-        }
-
-        while (missao.getInimigos().size() < numInimigos) {
-            int x = random.nextInt(maxX - minX + 1) + minX;
-            int y = random.nextInt(maxY - minY + 1) + minY;
-            if (x == nave.getX() && y == nave.getY()) continue;
-            if (posicaoOcupada(missao, x, y)) continue;
-            missao.addInimigo(new Inimigo(x, y));
-        }
-
-        return missao;
-    }
-
-    private static boolean posicaoOcupada(Missao missao, int x, int y) {
-        if (missao.getNave().getX() == x && missao.getNave().getY() == y) return true;
-        for (Passageiro p : missao.getPassageiros()) {
-            if (p.getX() == x && p.getY() == y) return true;
-        }
-        for (Asteroide a : missao.getAsteroides()) {
-            if (a.getX() == x && a.getY() == y) return true;
-        }
-        for (Inimigo i : missao.getInimigos()) {
-            if (i.getX() == x && i.getY() == y) return true;
-        }
-        return false;
     }
 
     private static void movimentoInimigos(Missao missao) {
