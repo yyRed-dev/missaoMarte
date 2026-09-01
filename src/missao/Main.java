@@ -20,8 +20,11 @@ public class Main {
         GerenciadorInimigos gerenciadorInimigos = new GerenciadorInimigos(random);
         RenderizadorMapa renderizadorMapa = new RenderizadorMapa();
 
+        RepositorioRankingJson repositorioRanking = new RepositorioRankingJson();
+        GerenciadorRanking gerenciadorRanking = new GerenciadorRanking(repositorioRanking);
+
         Path rankingPath = Paths.get("ranking.json");
-        List<RankingEntry> ranking = loadRanking(rankingPath);
+        List<RankingEntry> ranking = gerenciadorRanking.carregar(rankingPath);
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Digite o nome do piloto: ");
@@ -68,7 +71,7 @@ public class Main {
         } else {
             for (int i = 0; i < Math.min(5, ranking.size()); i++) {
                 RankingEntry entry = ranking.get(i);
-                System.out.printf(" %d. %s: %d pontos - %d tripulantes%n",i + 1, entry.name, entry.score, entry.tripulacao);
+                System.out.printf(" %d. %s: %d pontos - %d tripulantes%n",i + 1,entry.getNome(),entry.getScore(),entry.getTripulacao() );
             }
         }
         
@@ -159,14 +162,13 @@ public class Main {
                 if (missao.todosEmbarcados()) {
                     System.out.println("Todos os passageiros embarcados! Missão concluída com sucesso.");
                     System.out.printf("Pontuação final: %d\n", score);
-                    if (score > 0 && isTopScore(ranking, score)) {
-                        ranking.add(new RankingEntry(pilotoNome, score, nave.getPassageiros().size() ) );
-                        ranking = ranking.stream()
-                                .sorted(Comparator.comparingInt((RankingEntry e) -> e.score).reversed())
-                                .limit(5)
-                                .collect(Collectors.toList());
-                        saveRanking(rankingPath, ranking);
+                    
+                    if (score > 0 && gerenciadorRanking.ehTop5(ranking, score)) {
+
+                        gerenciadorRanking.adicionarPontuacao( ranking, pilotoNome, score, nave.getPassageiros().size(), rankingPath );
+
                         System.out.println("Novo ranking salvo! Você está entre os 5 maiores pontuadores.");
+                        }
                     }
                     break;
                 }
@@ -188,11 +190,10 @@ public class Main {
             } else {
                 playAgain = false;
             }
-        }
-
         scanner.close();
         System.out.println("Fim da execução.");
     }
+    
 
     private static void printRanking(List<RankingEntry> ranking) {
         int position = 1;
@@ -201,112 +202,4 @@ public class Main {
         }
     }
 
-    private static boolean isTopScore(List<RankingEntry> ranking, int score) {
-        if (ranking.size() < 5) {
-            return true;
-        }
-        return score > ranking.get(ranking.size() - 1).score;
-    }
-
-    private static List<RankingEntry> loadRanking(Path path) {
-        if (!Files.exists(path)) {
-            return new ArrayList<>();
-        }
-        try {
-            String json = new String(Files.readAllBytes(path), StandardCharsets.UTF_8).trim();
-            return parseRankingJson(json);
-        } catch (IOException e) {
-            return new ArrayList<>();
-        }
-    }
-
-    private static void saveRanking(Path path, List<RankingEntry> ranking) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("[");
-        for (int i = 0; i < ranking.size(); i++) {
-            RankingEntry entry = ranking.get(i);
-            builder.append("{\"name\":\"")
-                    .append(entry.name.replace("\"", "\\\""))
-                    .append("\",\"score\":")
-                    .append(entry.score)
-                    .append(",\"tripulacao\":")
-                    .append(entry.tripulacao)
-                    .append("}");
-            if (i < ranking.size() - 1) {
-                builder.append(",");
-            }
-        }
-        builder.append("]");
-        try {
-            Files.write(path, builder.toString().getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            System.out.println("Não foi possível salvar o ranking: " + e.getMessage());
-        }
-    }
-
-    private static List<RankingEntry> parseRankingJson(String json) {
-        List<RankingEntry> ranking = new ArrayList<>();
-        if (json.isEmpty() || json.equals("[]")) {
-            return ranking;
-        }
-        json = json.trim();
-        if (json.startsWith("[")) {
-            json = json.substring(1);
-        }
-        if (json.endsWith("]")) {
-            json = json.substring(0, json.length() - 1);
-        }
-
-        int index = 0;
-        while (index < json.length()) {
-            int start = json.indexOf('{', index);
-            if (start < 0) break;
-            int end = json.indexOf('}', start);
-            if (end < 0) break;
-            String object = json.substring(start + 1, end);
-            String name = null;
-            Integer score = null;
-            Integer tripulacao = null;
-            for (String part : object.split(",")) {
-                String[] pair = part.split(":", 2);
-                if (pair.length != 2) continue;
-                String key = pair[0].trim().replaceAll("\"", "");
-                String value = pair[1].trim();
-                if (key.equals("name")) {
-                    if (value.startsWith("\"") && value.endsWith("\"")) {
-                        name = value.substring(1, value.length() - 1).replace("\\\"", "\"");
-                    }
-                } else if (key.equals("score")) {
-                    try {
-                        score = Integer.parseInt(value);
-                    } catch (NumberFormatException ignored) {
-                    }
-                } else if (key.equals("tripulacao")) {
-                    try {
-                        tripulacao = Integer.parseInt(value);
-                    } catch (NumberFormatException ignored) {
-                    }
-                }
-            }
-            if (name != null && score != null) {
-                ranking.add(new RankingEntry(name, score, tripulacao != null ? tripulacao : 0));
-            }
-            index = end + 1;
-        }
-
-        ranking.sort(Comparator.comparingInt((RankingEntry e) -> e.score).reversed());
-        return ranking;
-    }
-
-    private static class RankingEntry {
-        private final String name;
-        private final int score;
-        private final int tripulacao;
-
-        private RankingEntry(String name, int score, int tripulacao) {
-            this.name = name;
-            this.score = score;
-            this.tripulacao = tripulacao;
-        }
-    }
 }
