@@ -16,6 +16,8 @@ public class Main {
     public static void main(String[] args) {
         Random random = new Random();
         CriadorDeMissao criadorDeMissao = new CriadorDeMissao(random);
+        GerenciadorColisoes gerenciadorColisoes = new GerenciadorColisoes();
+        GerenciadorInimigos gerenciadorInimigos = new GerenciadorInimigos(random);
 
         Path rankingPath = Paths.get("ranking.json");
         List<RankingEntry> ranking = loadRanking(rankingPath);
@@ -105,11 +107,6 @@ public class Main {
                 System.out.printf("Nave em (%d,%d) | Pontos: %d | Passageiros a bordo: %d | Passageiros restantes: %d\n",
                         nave.getX(), nave.getY(), score, nave.getPassageiros().size(), missao.todosEmbarcados() ? 0 : missao.getPassageiros().size());
 
-                if (missao.verificaColisao() ) {
-                    System.out.println("Missão abortada.");
-                    break;
-                }
-
                 System.out.print("Para onde ir? ");
                 String line = scanner.nextLine().trim().toLowerCase();
                 if (line.isEmpty()) continue;
@@ -137,7 +134,21 @@ public class Main {
                     case 'q': running = false; break;
                     default: System.out.println("Comando desconhecido.");
                 }
-                movimentoInimigos(missao);
+                gerenciadorInimigos.movimentar(missao, minX, maxX, minY, maxY);
+
+                ResultadoColisao resultadoColisao = gerenciadorColisoes.verificarColisao(missao);
+
+                switch (resultadoColisao) {
+                    case ASTEROIDE: System.out.println("\nColisão com Asteroide! Total de vidas restantes: " + missao.getNave().getVidas() + "/3."); break;
+                    case INIMIGO: System.out.println("\nColisão com Nave inimiga! Total de vidas restantes: " + missao.getNave().getVidas() + "/3."); break;
+                    case NENHUMA:break;
+                    default: System.out.println("Um erro ocorreu durante o calculo de colisão, por favor reinicie o jogo."); break;
+                }
+
+                if (missao.getNave().getVidas() == 0) {
+                    System.out.println("Missão abortada.");
+                    break;
+                }
 
                 if (score <= 0) {
                     System.out.println("Pontuação zerada. Missão perdida.");
@@ -186,13 +197,6 @@ public class Main {
         int position = 1;
         for (RankingEntry entry : ranking) {
             System.out.printf("%d. %s - %d pontos - %d tripulantes%n",position++, entry.name, entry.score, entry.tripulacao);
-        }
-    }
-
-    private static void movimentoInimigos(Missao missao) {
-        for (Inimigo inimigo : missao.getInimigos() ) {
-            int mov = (int) (Math.random() *4 );
-            inimigo.moverAleatorio(mov);
         }
     }
 

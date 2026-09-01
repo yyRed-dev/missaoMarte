@@ -34,31 +34,6 @@ public class Missao {
     public void addAsteroide(Asteroide a) { asteroides.add(a); }
     public void addInimigo(Inimigo i) { inimigos.add(i); }
 
-    public boolean verificaColisao() {
-        for (Asteroide a : asteroides) {
-            if (a.colideCom(nave)) {
-                nave.sofreuDano();
-                System.out.println("\nColisão com Asteroide! Total de vidas restantes: " + nave.getVidas() + "/3.");
-
-                if (nave.getVidas() == 0) {
-                    return true;
-                }
-            }
-        }
-
-        for (Inimigo i : inimigos) {
-            if (i.colideCom(nave)) {
-                nave.sofreuDano();
-                System.out.println("\nColisão com Nave inimiga! Total de vidas restantes: " + nave.getVidas() + "/3.");
-
-                if (nave.getVidas() == 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public Passageiro passagemNaPosicao() {
         for (Passageiro p : passageiros) {
             if (p.getX() == nave.getX() && p.getY() == nave.getY()) return p;
