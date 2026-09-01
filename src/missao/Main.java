@@ -272,13 +272,7 @@ public class Main {
                 } else {
                     for (Passageiro p : missao.getPassageiros()) {
                         if (p.getX() == x && p.getY() == y) {
-                            if (p instanceof Engenheiro) {
-                                symbol = 'E';
-                            } else if (p instanceof Astronauta) {
-                                symbol = 'T';
-                            } else {
-                                symbol = 'P';
-                            }
+                            symbol = p.getSimbolo();
                             break;
                         }
                     }

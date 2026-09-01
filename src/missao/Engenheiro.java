@@ -9,4 +9,9 @@ public class Engenheiro extends Passageiro {
     public int getPontos() {
         return 15;
     }
+
+    @Override
+    public char getSimbolo() {
+        return 'E';
+    }
 }

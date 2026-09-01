@@ -9,4 +9,10 @@ public class Professor extends Passageiro {
     public int getPontos() {
         return 10;
     }
+
+    @Override
+    public char getSimbolo() {
+        return 'P';
+    }
+
 }

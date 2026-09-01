@@ -9,4 +9,9 @@ public class Astronauta extends Passageiro {
     public int getPontos() {
         return 20;
     }
+
+    @Override
+    public char getSimbolo() {
+        return 'T';
+    }
 }
