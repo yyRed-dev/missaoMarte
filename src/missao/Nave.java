@@ -31,13 +31,22 @@ public class Nave {
     public void moveLeft() { x--; }
     public void moveRight() { x++; }
 
-    public void sofreuDano() { vidas--;}
+    public void sofreuDano() { 
+        if (this.vidas > 0) {
+            vidas--;
+        }
+    }
 
     public boolean embarcar(Passageiro p) {
-        if (passageiros.size() < capacidade) {
-            passageiros.add(p);
-            return true;
+        if (p == null) {
+            return false;
         }
-        return false;
+        
+        if (passageiros.size() >= capacidade) {
+            return false;
+        }
+
+        passageiros.add(p);
+        return true;
     }
 }
