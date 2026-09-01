@@ -4,7 +4,7 @@ public class PlataformaPouso {
 
     private final int x;
     private final int y;
-    private final char simbolo = '_';
+    private final char simbolo = 'L';
 
     public PlataformaPouso(int x, int y) {
         this.x = x;
