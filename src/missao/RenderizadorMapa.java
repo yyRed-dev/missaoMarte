@@ -43,7 +43,11 @@ public class RenderizadorMapa {
     private char obterSimbolo(Missao missao, int x, int y) {
 
         if (missao.getNave().getX() == x && missao.getNave().getY() == y) {
-            return 'N';
+            return missao.getNave().getSimbolo();
+        }
+
+        if (missao.getPlataformaPouso().getX() == x && missao.getPlataformaPouso().getY() == y) {
+            return missao.getPlataformaPouso().getSimbolo();
         }
 
         for (Passageiro p : missao.getPassageiros()) {
@@ -54,15 +58,16 @@ public class RenderizadorMapa {
 
         for (Asteroide a : missao.getAsteroides()) {
             if (a.getX() == x && a.getY() == y) {
-                return 'A';
+                return a.getSimbolo();
             }
         }
 
         for (Inimigo i : missao.getInimigos()) {
             if (i.getX() == x && i.getY() == y) {
-                return 'I';
+                return i.getSimbolo();
             }
         }
+
         return '.';
     }
 }

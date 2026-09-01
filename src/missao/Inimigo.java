@@ -3,6 +3,7 @@ package missao;
 public class Inimigo {
     private int x;
     private int y;
+    private final char simbolo = 'I';
 
     public Inimigo(int x, int y) {
         this.x = x;
@@ -18,6 +19,8 @@ public class Inimigo {
     public void moverBaixo() { y--; }
     public void moverDireita() { x++; }
     public void moverEsquerda() { x--; }
+
+    public char getSimbolo() { return simbolo; }
 
     public boolean colideCom(Nave n) {
         return n.getX() == x && n.getY() == y;

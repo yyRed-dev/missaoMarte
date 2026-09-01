@@ -10,6 +10,7 @@ public class Nave {
     private int capacidade;
     private List<Passageiro> passageiros = new ArrayList<>();
     private int vidas;
+    private final char simbolo = 'N';
 
     public Nave(String id, int capacidade) {
         this.id = id;
@@ -25,6 +26,7 @@ public class Nave {
     public int getCapacidade() { return capacidade; }
     public List<Passageiro> getPassageiros() { return passageiros; }
     public int getVidas() { return vidas; }
+    public char getSimbolo() { return simbolo; }
 
     public void moveUp() { y--; }
     public void moveDown() { y++; }

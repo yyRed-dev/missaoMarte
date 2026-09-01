@@ -3,6 +3,7 @@ package missao;
 public class Asteroide {
     private int x;
     private int y;
+    private final char simbolo = 'A';
 
     public Asteroide(int x, int y) {
         this.x = x;
@@ -15,4 +16,7 @@ public class Asteroide {
     public boolean colideCom(Nave n) {
         return n.getX() == x && n.getY() == y;
     }
+
+    public char getSimbolo() { return simbolo; }
+
 }

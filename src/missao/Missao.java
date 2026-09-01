@@ -9,26 +9,18 @@ public class Missao {
     private List<Passageiro> passageiros = new ArrayList<>();
     private List<Asteroide> asteroides = new ArrayList<>();
     private List<Inimigo> inimigos = new ArrayList<>();
+    private final PlataformaPouso plataformaPouso;
 
     public Missao(Nave nave) {
         this.nave = nave;
+        this.plataformaPouso = new PlataformaPouso(0, 0);
     }
 
-    public Nave getNave() {
-        return nave;
-    }
-
-    public java.util.List<Passageiro> getPassageiros() {
-        return passageiros;
-    }
-
-    public java.util.List<Asteroide> getAsteroides() {
-        return asteroides;
-    }
-
-    public java.util.List<Inimigo> getInimigos() {
-        return inimigos;
-    }
+    public Nave getNave() { return nave; }
+    public java.util.List<Passageiro> getPassageiros() { return passageiros; }
+    public java.util.List<Asteroide> getAsteroides() { return asteroides; }
+    public java.util.List<Inimigo> getInimigos() { return inimigos; }
+    public PlataformaPouso getPlataformaPouso() { return plataformaPouso; }
 
     public void addPassageiro(Passageiro p) { passageiros.add(p); }
     public void addAsteroide(Asteroide a) { asteroides.add(a); }

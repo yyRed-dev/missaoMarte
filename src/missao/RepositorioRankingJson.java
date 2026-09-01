@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,14 +12,11 @@ import java.util.List;
 public class RepositorioRankingJson {
 
     public List<RankingEntry> carregar(Path path) {
-        if (!Files.exists(path)) {
-            return new ArrayList<>();
-        }
+        if (!Files.exists(path)) return new ArrayList<>();
 
         try {
-            String json = new String( Files.readAllBytes(path), StandardCharsets.UTF_8 ).trim();
+            String json = new String(Files.readAllBytes(path), StandardCharsets.UTF_8).trim();
             return interpretarJson(json);
-
         } catch (IOException e) {
             System.out.println("Não foi possível carregar o ranking: " + e.getMessage());
             return new ArrayList<>();
@@ -38,17 +36,21 @@ public class RepositorioRankingJson {
                     .append(entry.getScore())
                     .append(",\"tripulacao\":")
                     .append(entry.getTripulacao())
-                    .append("}");
-            if (i < ranking.size() - 1) {
-                builder.append(",");
-            }
+                    .append(",\"dataHora\":\"")
+                    .append(entry.getDataHora())
+                    .append("\",\"passageirosResgatados\":")
+                    .append(entry.getPassageirosResgatados())
+                    .append(",\"dificuldade\":\"")
+                    .append(entry.getDificuldade())
+                    .append("\"}");
+
+            if (i < ranking.size() - 1) builder.append(",");
         }
 
         builder.append("]");
 
         try {
-            Files.write(path,builder.toString().getBytes(StandardCharsets.UTF_8) );
-
+            Files.write(path, builder.toString().getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             System.out.println("Não foi possível salvar o ranking: " + e.getMessage());
         }
@@ -57,74 +59,96 @@ public class RepositorioRankingJson {
     private List<RankingEntry> interpretarJson(String json) {
         List<RankingEntry> ranking = new ArrayList<>();
 
-        if (json.isEmpty() || json.equals("[]")) {
-            return ranking;
-        }
+        if (json.isEmpty() || json.equals("[]")) return ranking;
+
         json = json.trim();
 
-        if (json.startsWith("[")) {
-            json = json.substring(1);
-        }
-
-        if (json.endsWith("]")) {
-            json = json.substring(0, json.length() - 1);
-        }
+        if (json.startsWith("[")) json = json.substring(1);
+        if (json.endsWith("]")) json = json.substring(0, json.length() - 1);
 
         int index = 0;
+
         while (index < json.length()) {
             int start = json.indexOf('{', index);
+            if (start < 0) break;
 
-            if (start < 0) {
-                break;
-            }
             int end = json.indexOf('}', start);
+            if (end < 0) break;
 
-            if (end < 0) {
-                break;
-            }
             String object = json.substring(start + 1, end);
 
             String nome = null;
             Integer score = null;
             Integer tripulacao = null;
+            String dataHora = null;
+            Integer passageirosResgatados = null;
+            Dificuldade dificuldade = null;
 
             for (String part : object.split(",")) {
-
                 String[] pair = part.split(":", 2);
-                if (pair.length != 2) {
-                    continue;
-                }
+                if (pair.length != 2) continue;
 
                 String key = pair[0].trim().replaceAll("\"", "");
                 String value = pair[1].trim();
 
                 if (key.equals("name")) {
-
                     if (value.startsWith("\"") && value.endsWith("\"")) {
-                        nome = value.substring(1, value.length() - 1)
-                                .replace("\\\"", "\"");
+                        nome = value.substring(1, value.length() - 1).replace("\\\"", "\"");
                     }
-
                 } else if (key.equals("score")) {
                     try {
                         score = Integer.parseInt(value);
                     } catch (NumberFormatException ignored) {
                     }
-
                 } else if (key.equals("tripulacao")) {
                     try {
                         tripulacao = Integer.parseInt(value);
                     } catch (NumberFormatException ignored) {
                     }
+                } else if (key.equals("dataHora")) {
+                    if (value.startsWith("\"") && value.endsWith("\"")) {
+                        dataHora = value.substring(1, value.length() - 1);
+                    }
+                } else if (key.equals("passageirosResgatados")) {
+                    try {
+                        passageirosResgatados = Integer.parseInt(value);
+                    } catch (NumberFormatException ignored) {
+                    }
+                } else if (key.equals("dificuldade")) {
+                    if (value.startsWith("\"") && value.endsWith("\"")) {
+                        try {
+                            dificuldade = Dificuldade.valueOf(value.substring(1, value.length() - 1));
+                        } catch (IllegalArgumentException ignored) {
+                        }
+                    }
                 }
             }
 
             if (nome != null && score != null) {
-                ranking.add( new RankingEntry(nome,score,tripulacao != null ? tripulacao : 0) );
+                LocalDateTime data = LocalDateTime.now();
+
+                if (dataHora != null) {
+                    try {
+                        data = LocalDateTime.parse(dataHora);
+                    } catch (Exception ignored) {
+                    }
+                }
+
+                ranking.add(new RankingEntry(
+                        nome,
+                        score,
+                        tripulacao != null ? tripulacao : 0,
+                        data,
+                        passageirosResgatados != null ? passageirosResgatados : 0,
+                        dificuldade
+                ));
             }
+
             index = end + 1;
         }
-        ranking.sort(Comparator.comparingInt(RankingEntry::getScore).reversed() );
+
+        ranking.sort(Comparator.comparingInt(RankingEntry::getScore).reversed());
         return ranking;
     }
+    public void resetar(Path path) { salvar(path, new ArrayList<>()); }
 }
